@@ -7,7 +7,7 @@
 view_create(
   config = cfg_edge,
   table_name = "t_icitem",
-  view_suffix = "_view",
+  view_name = "t_icitem_view",
   selector = c("FItemID", "FName")
 )
 }
@@ -16,7 +16,7 @@ view_create(
 
 \item{table_name}{来源表名}
 
-\item{view_suffix}{视图后缀}
+\item{view_name}{视图名称}
 
 \item{selector}{字段列表}
 }
