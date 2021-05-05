@@ -1,0 +1,5 @@
+db_name = AIS20140904110155
+user = sa
+password = rds@2020
+ip = ip
+port = 1433

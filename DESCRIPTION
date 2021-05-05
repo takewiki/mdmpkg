@@ -9,13 +9,14 @@ Description: a package for mdm in rds sulustions
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Collate: 
     'bill_mfg_mo.R'
     'bill_mfg_pickMaterial.R'
     'bill_mfg_ppbom.R'
     'bill_mfg_returnMaterial.R'
     'bill_mfg_supplementMaterial.R'
+    'bill_number.R'
     'bill_pur_pi.R'
     'bill_pur_po.R'
     'bill_pur_purchaseInStock.R'
@@ -28,8 +29,10 @@ Collate:
     'md_customer.R'
     'md_department.R'
     'md_employee.R'
+    'md_item.R'
     'util.R'
     'md_material.R'
+    'md_material_vm.R'
     'md_organization.R'
     'md_supplier.R'
     'md_user.R'
