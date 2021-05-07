@@ -134,8 +134,9 @@ md_createTable_room <- function(conn=vmrdspkg::conn_vm_erp_test(),table_name='t_
 #将未分配的物料写入待分配表
 #' 将外购的物料推入待分配表
 #'
+#' @param table_name_rds 物料明细表
+#' @param table_name_room 待分配统计表
 #' @param conn 连接
-#' @param table_name 基础资料未分配表名
 #'
 #' @return 返回值
 #' @export
@@ -240,4 +241,261 @@ select
   }
    return(res)
  }
+
+
+
+
+#' 针对自制物料进行初始化隐藏处理
+#'
+#' @param conn ERP链接信息
+#' @param table_name_rds 物料明细表
+#' @param table_name_room 待分配统计表
+#'
+#' @return 返回值
+#' @export
+#'
+#' @examples
+#' md_pushItem2UnAllocated_zz()
+md_pushItem2UnAllocated_zz <-function(conn=vmrdspkg::conn_vm_erp_test(),
+                                       table_name_rds='t_Item_rds',
+                                       table_name_room ='t_item_rdsRoom'
+ ){
+
+   sql_item <- paste0("select  count(1)  as Fcount
+		   from t_item
+		where FNumber like 'RDS.02.%'
+		and fname = 'ZZ'")
+   data_item <- tsda::sql_select(conn,sql_item)
+   ncount <- data_item$Fcount
+   if (ncount >0){
+     #存在待处理的记录
+     sql_wg <-paste0("
+ INSERT INTO [dbo].[",table_name_rds,"]
+           ([FItemID]
+           ,[FItemClassID]
+           ,[FExternID]
+           ,[FNumber]
+           ,[FParentID]
+           ,[FLevel]
+           ,[FDetail]
+           ,[FName]
+           ,[FUnUsed]
+           ,[FBrNo]
+           ,[FFullNumber]
+           ,[FDiff]
+           ,[FDeleted]
+           ,[FShortNumber]
+           ,[FFullName]
+           ,[UUID]
+           ,[FGRCommonID]
+           ,[FSystemType]
+           ,[FUseSign]
+           ,[FChkUserID]
+           ,[FAccessory]
+           ,[FGrControl]
+           ,[FHavePicture])
+ select [FItemID]
+           ,[FItemClassID]
+           ,[FExternID]
+           ,[FNumber]
+           ,[FParentID]
+           ,[FLevel]
+           ,[FDetail]
+           ,[FName]
+           ,[FUnUsed]
+           ,[FBrNo]
+           ,[FFullNumber]
+           ,[FDiff]
+           ,[FDeleted]
+           ,[FShortNumber]
+           ,[FFullName]
+           ,[UUID]
+           ,[FGRCommonID]
+           ,[FSystemType]
+           ,[FUseSign]
+           ,[FChkUserID]
+           ,[FAccessory]
+           ,[FGrControl]
+           ,[FHavePicture]
+		   from t_item
+		where FNumber like 'RDS.02.%'
+		and fname = 'ZZ'")
+     #深度对数据进行数据
+     try(tsda::sql_update(conn,sql_wg))
+
+     sql_room <- paste0("insert into ",table_name_room,"
+select
+          [FItemClassID],
+
+          [FItemID]
+
+
+           ,[FNumber]
+
+           ,[FName],
+		   '自制' as FPropType,
+		   '' as FNumber_New,
+		   0 as FFlag
+
+		   from t_item
+		where FNumber like 'RDS.02.%'
+		and fname = 'ZZ'")
+
+     try(tsda::sql_update(conn,sql_room))
+
+     sql_del <- paste0("delete from t_item
+		where FNumber like 'RDS.02.%'
+		and fname = 'ZZ'")
+     try(tsda::sql_update(conn,sql_del))
+
+     res <- TRUE
+   }else{
+     res <- FALSE
+   }
+   return(res)
+ }
+
+
+
+#' 处理委外待分配数据
+#'
+#' @param conn 连接
+#' @param table_name_rds 物料明细表
+#' @param table_name_room 待分配信息表
+#'
+#' @return 返回值
+#' @export
+#'
+#' @examples
+#' md_pushItem2UnAllocated_ww()
+md_pushItem2UnAllocated_ww <-function(conn=vmrdspkg::conn_vm_erp_test(),
+                                      table_name_rds='t_Item_rds',
+                                      table_name_room ='t_item_rdsRoom'
+){
+
+  sql_item <- paste0("select  count(1)  as Fcount
+		   from t_item
+		where FNumber like 'RDS.03.%'
+		and fname = 'WW'")
+  data_item <- tsda::sql_select(conn,sql_item)
+  ncount <- data_item$Fcount
+  if (ncount >0){
+    #存在待处理的记录
+    sql_wg <-paste0("
+ INSERT INTO [dbo].[",table_name_rds,"]
+           ([FItemID]
+           ,[FItemClassID]
+           ,[FExternID]
+           ,[FNumber]
+           ,[FParentID]
+           ,[FLevel]
+           ,[FDetail]
+           ,[FName]
+           ,[FUnUsed]
+           ,[FBrNo]
+           ,[FFullNumber]
+           ,[FDiff]
+           ,[FDeleted]
+           ,[FShortNumber]
+           ,[FFullName]
+           ,[UUID]
+           ,[FGRCommonID]
+           ,[FSystemType]
+           ,[FUseSign]
+           ,[FChkUserID]
+           ,[FAccessory]
+           ,[FGrControl]
+           ,[FHavePicture])
+ select [FItemID]
+           ,[FItemClassID]
+           ,[FExternID]
+           ,[FNumber]
+           ,[FParentID]
+           ,[FLevel]
+           ,[FDetail]
+           ,[FName]
+           ,[FUnUsed]
+           ,[FBrNo]
+           ,[FFullNumber]
+           ,[FDiff]
+           ,[FDeleted]
+           ,[FShortNumber]
+           ,[FFullName]
+           ,[UUID]
+           ,[FGRCommonID]
+           ,[FSystemType]
+           ,[FUseSign]
+           ,[FChkUserID]
+           ,[FAccessory]
+           ,[FGrControl]
+           ,[FHavePicture]
+		   from t_item
+		where FNumber like 'RDS.03.%'
+		and fname = 'WW'")
+    #深度对数据进行数据
+    try(tsda::sql_update(conn,sql_wg))
+
+    sql_room <- paste0("insert into ",table_name_room,"
+select
+          [FItemClassID],
+
+          [FItemID]
+
+
+           ,[FNumber]
+
+           ,[FName],
+		   '委外' as FPropType,
+		   '' as FNumber_New,
+		   0 as FFlag
+
+		   from t_item
+		where FNumber like 'RDS.03.%'
+		and fname = 'WW'")
+
+    try(tsda::sql_update(conn,sql_room))
+
+    sql_del <- paste0("delete from t_item
+		where FNumber like 'RDS.03.%'
+		and fname = 'WW'")
+    try(tsda::sql_update(conn,sql_del))
+
+    res <- TRUE
+  }else{
+    res <- FALSE
+  }
+  return(res)
+}
+
+
+
+#' 返回未分配的物料数据
+#'
+#' @param conn 连接
+#' @param n  返回数量
+#' @param FPropType 物料属性
+#'
+#' @return 返回值
+#' @export
+#'
+#' @examples
+#' Item_getUnAllocateNumbers()
+Item_getUnAllocateNumbers <- function(conn=vmrdspkg::conn_vm_erp_test(),
+                               n=10,FPropType='外购') {
+  #获取相应的数据
+  sql <- paste0(" select  top  ",n,"  FNumber from t_item_rdsroom
+ where  FPropType = '",FPropType,"' and FFlag = 0
+ order by FNumber")
+  data <- tsda::sql_select(conn,sql)
+  ncount <-nrow(data)
+  if(ncount == n){
+    res <- data
+  }else{
+    res <- NULL
+  }
+  return(res)
+
+}
+
+
 
