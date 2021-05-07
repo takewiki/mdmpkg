@@ -482,9 +482,10 @@ select
 #' Item_getUnAllocateNumbers()
 Item_getUnAllocateNumbers <- function(conn=vmrdspkg::conn_vm_erp_test(),
                                n=10,FPropType='外购') {
-  #获取相应的数据
+  #获取相应的数据物料数据，不考虑成本成本对象
+  # 但是更新数据时需要考虑成本对象的
   sql <- paste0(" select  top  ",n,"  FNumber from t_item_rdsroom
- where  FPropType = '",FPropType,"' and FFlag = 0
+ where  FPropType = '",FPropType,"' and FFlag = 0 and FItemClassId = 4
  order by FNumber")
   data <- tsda::sql_select(conn,sql)
   ncount <-nrow(data)
