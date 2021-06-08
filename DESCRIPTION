@@ -1,7 +1,7 @@
 Package: mdmpkg
 Type: Package
 Title: master data management in RDS
-Version: 0.2.0
+Version: 0.3.0
 Author: hulilei
 Maintainer: hulilei <hulilei@takewiki.com.cn>
 Description: a package for mdm in rds sulustions

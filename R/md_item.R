@@ -1,5 +1,7 @@
-# 创建表结构--------
+# 创建表结构，不再使用--------
 #' 创建基础资料主数据的副表，用于存储待分配的物料
+#
+#' #创建结果已经迁移
 #'
 #' @param conn 连接
 #'
@@ -50,7 +52,7 @@ md_createTable_unAllocated <- function(conn=vmrdspkg::conn_vm_erp_test(),table_n
 }
 
 
-
+#创建备份数据表------
 #' 创建主数据备用表
 #'
 #' @param conn 连接
@@ -127,6 +129,40 @@ md_createTable_room <- function(conn=vmrdspkg::conn_vm_erp_test(),table_name='t_
 	 tsda::sql_update(conn,sql)
 
 }
+
+
+
+#'创建分配后的表结构
+#'
+#' @param conn 连接
+#' @param table_name 已分配表结构名称
+#'
+#' @return 返回值
+#' @export
+#'
+#' @examples
+#' md_createTable_rdsInput()
+md_createTable_rdsInput <- function(conn=vmrdspkg::conn_vm_erp_test(),table_name='t_item_rdsInput') {
+  sql <- paste0("	Create table ",table_name,"  (
+  [MCode] [nvarchar](30) NULL,
+	[MName] [nvarchar](80) NULL,
+	[Spec] [nvarchar](80) NULL,
+	[MDesc] [nvarchar](80) NULL,
+	[UOM] [nvarchar](30) NULL,
+	[MProp] [nvarchar](30) NULL,
+	FNumber varchar(80) not null,
+	[FBatchNum] [varchar](50) NULL,
+	FIsDo int default(0),
+	FItemId int default(0),
+	FParentNumber varchar(30)
+
+		)")
+
+  tsda::sql_update(conn,sql)
+
+}
+
+
 
 
 
